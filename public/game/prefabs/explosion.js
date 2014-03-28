@@ -8,7 +8,7 @@ var Explosion = function(game, x, y, color, particleSize, explosionSize) {
   Phaser.Particles.Arcade.Emitter.call(this, game, 0, 0);
   this.particleClass = Bullet
   this.gravity = 500;
-  this.makeParticles(4,BulletTypes.PLAYER);
+  this.makeParticles(4,BulletTypes.DEFAULT);
 };
 
 Explosion.prototype = Object.create(Phaser.Particles.Arcade.Emitter.prototype);

@@ -1,38 +1,8 @@
 'use strict';
-var BulletTypes = Object.freeze({
-  0: {
-    color: 'yellow',
-    velocity: {
-      x: 0,
-      y: -1
-    }
-  },
-  1: {
-    color: 'green',
-    velocity: {
-      x: 1,
-      y: 0
-    }
-  },
-  2: {
-    color: 'red',
-    velocity: {
-      x: 0,
-      y: 1
-    }
-  },
-  3: {
-    color: 'blue',
-    velocity: {
-      x: -1,
-      y: 0
-    }
-  },
 
-});
 
 var Bullet = function(game, x, y, bulletType, bulletSpeed) {
-  this.bulletType = !!bulletType ? BulletTypes[bulletType] : BulletTypes[0];
+  this.bulletType = !!bulletType ? bulletType : BulletTypes.DEFAULT;
   this.bulletSpeed = bulletSpeed || 1000;
 
   Block.call(this, game, x, y, 4, this.bulletType.color);
@@ -54,7 +24,7 @@ Bullet.prototype.fire = function() {
 };
 
 Bullet.prototype.setBulletType = function(bulletType) {
-  this.bulletType = BulletTypes[bulletType];
+  this.bulletType = bulletType;
   this.setColor(this.bulletType.color);
 };
 

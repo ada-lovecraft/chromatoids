@@ -27,16 +27,31 @@ var Enemy = function(game, x, y, enemyType, enemySpeed) {
   this.body.collideWorldBounds = true;
   this.body.bounce.setTo(1, 1);
   this.body.immovable = true;
+  this.maxSpeed = 500;
 
-  this.body.velocity.x = game.rnd.integerInRange(-this.enemySpeed / 4, this.enemySpeed / 4) * 4;
-  this.body.velocity.y = game.rnd.integerInRange(-this.enemySpeed / 4, this.enemySpeed / 4) * 4;
+  
+  this.events.onRevived.add(function() {
+    this.body.velocity.x = game.rnd.integerInRange(-this.enemySpeed / 4, this.enemySpeed / 4) * 4;
+    this.body.velocity.y = game.rnd.integerInRange(-this.enemySpeed / 4, this.enemySpeed / 4) * 4;
+  }, this);
 };
 
 Enemy.prototype = Object.create(Block.prototype);
 Enemy.prototype.constructor = Enemy;
 
-Enemy.prototype.setEnemyType = function(enemyType) {
+Enemy.prototype.setType = function(enemyType) {
   this.enemyType = EnemyTypes[enemyType];
   this.setColor(this.enemyType.color);
+};
+
+Enemy.prototype.update = function() {
+  this.body.velocity.x *= 1.002;
+  this.body.velocity.y *= 1.002;
+  if(this.body.velocity.x > this.maxSpeed) {
+    this.body.velocity.x = this.maxSpeed;
+  }
+  if(this.body.velocity.y > this.maxSpeed) {
+    this.body.velocity.y = this.maxSpeed;
+  }
 }
 

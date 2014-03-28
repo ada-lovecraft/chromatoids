@@ -1,11 +1,5 @@
 'use strict';
 
-var FireDirection = Object.freeze({
-  UP: 0,
-  RIGHT: 1,
-  DOWN: 2,
-  LEFT: 3
-});
 
 var Player = function(game, x, y, moveSpeed, fireRate, bulletGroup) {
 
@@ -51,14 +45,14 @@ Player.prototype.setBulletGroup = function(bulletGroup) {
 
 Player.prototype.fire = function(key) {
   if(this.fireTimer < game.time.now) {
-    var direction = FireDirection[key.event.keyIdentifier.toUpperCase()];
+    var bulletType = BulletTypes[key.event.keyIdentifier.toUpperCase()];
     var bullet = this.bulletGroup.getFirstExists(false);
     if (!bullet) {
-      bullet = new Bullet(game, this.x, this.y, direction);
+      bullet = new Bullet(game, this.x, this.y, bulletType);
       this.bulletGroup.add(bullet);
       bullet.fire()
     } else {
-      bullet.setBulletType(direction);
+      bullet.setBulletType(bulletType);
       bullet.reset(this.x, this.y);
       bullet.revive();
       bullet.fire();

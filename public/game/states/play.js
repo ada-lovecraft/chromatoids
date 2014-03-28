@@ -16,16 +16,27 @@
       this.player = new Player(game, game.width/2, game.height/2, 500, 100, this.bulletGroup);
       game.add.existing(this.player);
 
-      this.enemy = new Enemy(game, 10, 10, 1);
-      game.add.existing(this.enemy);
-
+      this.level = 1;
 
 
     },
     update: function() {
-      game.physics.arcade.collide(this.bulletGroup, this.enemy, this.bulletHandler, null, this);
+      if(this.enemyGroup.countLiving() < this.level * 2) {
+        var enemy = this.enemyGroup.getFirstExists(false);
+        if(!enemy) {
+          enemy = new Enemy(game, game.world.randomX, game.world.randomY, game.rnd.integerInRange(0,3));
+          this.enemyGroup.add(enemy);
+        } else {
+          enemy.reset(game.world.randomX, game.world.randomY);
+          enemy.setType(game.rnd.integerInRange(0,3));
+        }
+        enemy.revive();
+      }
+      game.physics.arcade.collide(this.bulletGroup, this.enemyGroup, this.bulletHandler, null, this);
+      game.physics.arcade.collide(this.player, this.enemyGroup, this.deathHandler, null, this);
+      //game.physics.arcade.collide(this.explosion, this.enemyGroup, this.bulletHandler, null, this);
     },
-    bulletHandler: function(enemy, bullet) {
+    bulletHandler: function(bullet, enemy) {
       if(bullet.bulletType.color == enemy.enemyType.color) { 
         enemy.kill();
       }
@@ -34,9 +45,15 @@
       this.explosion.setColor(bullet.bulletType.color);
       this.explosion.explode();
       
-
       bullet.kill();
-
+    },
+    deathHandler: function(player, enemy) {
+      player.kill();
+      enemy.kill();
+      this.explosion.x = player.x;
+      this.explosion.y = player.y;
+      this.explosion.setColor('white');
+      this.explosion.explode(100);
     }
   };
   PlayState = Play;

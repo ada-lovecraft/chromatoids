@@ -8,20 +8,12 @@ var Colors = Object.freeze({
 });
 
 var EnemyTypes = Object.freeze({
-  0: {
-    color: Colors.YELLOW
-  },
-  1: {
-    color: Colors.GREEN
-  },
-  2: {
-    color: Colors.RED
-  },
-  3: {
-    color: Colors.BLUE
-  },
-
+  BASIC: BasicEnemy,
+  SEEKER: SeekerEnemy,
+  SLIDER: SliderEnemy
 });
+
+
 
 var BulletTypes = Object.freeze({
   UP: {

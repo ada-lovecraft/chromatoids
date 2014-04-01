@@ -26,6 +26,7 @@
 
       this.player = new Player(game, game.width/2, game.height/2, 500, 100, this.bulletGroup);
       game.add.existing(this.player);
+      GameUtils.setPlayer(this.player);
 
       this.scoreText = game.add.bitmapText(10, 10, 'minecraftia','SCORE: 0', 16);
 
@@ -60,19 +61,24 @@
     },
     generateEnemy: function() {
       if(this.enemyGroup.countLiving() < this.level * 2 && !this.gameOver) {
+        /*
         var enemy = this.enemyGroup.getFirstExists(false);
         if(!enemy) {
-          enemy = new Enemy(game, game.world.randomX, game.world.randomY, game.rnd.integerInRange(0,3));
+          enemy = EnemyFactory.create(EnemyTypes.BASIC, game, game.world.randomX, game.world.randomY, Colors.YELLOW);
           this.enemyGroup.add(enemy);
         } else {
           enemy.reset(game.world.randomX, game.world.randomY);
           enemy.setType(game.rnd.integerInRange(0,3));
         }
+        */
+        var enemy = EnemyFactory.create(game, GameUtils.randomEnemyType(), game.world.randomX, game.world.randomY, GameUtils.randomColor(['GREY', 'WHITE']));
         enemy.revive();
+        this.enemyGroup.add(enemy);
+        
       }
     },
     bulletHandler: function(bullet, enemy) {
-      if(bullet.bulletType == BulletTypes.CHROMATIC || bullet.bulletType.color == enemy.enemyType.color) { 
+      if(bullet.bulletType == BulletTypes.CHROMATIC || bullet.bulletType.color == enemy.bodyColor) { 
         enemy.kill();
         this.enemyDeathExplosion.x = enemy.x;
         this.enemyDeathExplosion.y = enemy.y;

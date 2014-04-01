@@ -1,22 +1,21 @@
 'use strict';
 
 
-var Enemy = function(game, x, y, enemyType, enemySpeed) {
-  this.enemyType = !!enemyType ? EnemyTypes[enemyType] : EnemyTypes[0];
+var Enemy = function(game, x, y, enemyColor, enemySize, enemySpeed) {
+  this.bodyColor = enemyColor || Colors.DEFAULT;
   this.enemySpeed = enemySpeed || 100;
+  this.size = enemySize || 24;
   
-  Block.call(this, game, x, y, 24, this.enemyType.color);
-
+  Block.call(this, game, x, y, this.size, this.bodyColor);
   this.anchor.setTo(0.5, 0.5);
   game.physics.arcade.enableBody(this);
-
+  
   this.body.collideWorldBounds = true;
   this.body.bounce.setTo(1, 1);
   this.body.immovable = true;
   this.maxSpeed = 500;
 
   this.isDangerous = false;
-
   
   this.events.onRevived.add(this.onRevived, this);
   this.events.onKilled.add(this.deathHandler, this);
@@ -37,10 +36,6 @@ Enemy.prototype.onRevived = function() {
 
 };
 
-Enemy.prototype.setType = function(enemyType) {
-  this.enemyType = EnemyTypes[enemyType];
-  this.setColor(this.enemyType.color);
-};
 
 Enemy.prototype.deathHandler = function() {
   this.deathSound.play();

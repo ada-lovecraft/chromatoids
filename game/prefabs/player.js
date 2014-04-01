@@ -74,6 +74,7 @@ Player.prototype.deathHandler = function() {
   this.deathSound.play();
 }
 
+
 Player.prototype.fire = function(key) {
   if(this.fireTimer < game.time.now) {
     var bulletType = BulletTypes[key.event.keyIdentifier.toUpperCase()];
@@ -114,18 +115,5 @@ Player.prototype.update = function() {
     this.body.velocity.y = -this.moveSpeed;
   }
 
-  /*
-  // firing
-  if(this.cursors.up.isDown) {
-    this.fire(FireDirection.UP);
-  } else if(this.cursors.down.isDown) {
-    this.fire(FireDirection.DOWN);
-  }
-  else if(this.cursors.left.isDown) {
-    this.fire(FireDirection.LEFT);
-  }
-  else if(this.cursors.right.isDown) {
-    this.fire(FireDirection.RIGHT);
-  }
-  */
+  
 };

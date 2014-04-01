@@ -123,9 +123,9 @@
         * Rapidly Cycles through the other colors, until hit. Then begins the color rotation of Yello, Green, Red, Blue.
       * Notes:
         * Effectively alread has 5 hp. Should not be affected by the "more health" buff.
-  * Basic Enemy:
+  * <del>Basic Enemy:
     * Description:
-      * Is a block of color
+      * Is a block of color</del>
     * Movement:
       * Bounces around the stage slowly increasing its velocity.
   * More health (can modify any of the enemies below)
@@ -133,16 +133,16 @@
       * Enemy has more health requiring more bullets to take down
     * Display:
       * Enemy's alpha is directly co-related to health
-  * Seekers
+  * <del>Seekers
     * Effect:
       * Enemy seeks the player
     * Display: 
-      * Angles toward player
-  * Sliders
+      * Angles toward player</del>
+  * <del>Sliders
     * Effect:
       * Every x ms, the slider moves either horizontally or vertically towards the player in a tween over the course of y ms
     * Display:
-      * Trail
+      * Trail</del>
   * Plasma Bars
     * Effect:
       * A bar of color wipes across the screen, correlating to the direction the player should fire to destroy it. As it wipes across the screen, it also destroys blocks of the same color it hits.

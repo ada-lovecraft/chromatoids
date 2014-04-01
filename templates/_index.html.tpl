@@ -12,15 +12,19 @@
 
   <!-- build:script phaser -->
   <!-- /build -->
-
   <!-- build:script gameBootstrapper -->
+  <!-- /build -->
+  
+  <!-- build:script gamePrefabs -->
   <!-- /build -->
 
   <!-- build:script gameStates -->
   <!-- /build -->
 
-  <!-- build:script gamePrefabs -->
-  <!-- /build -->
+
+
+  
+  
 
 
 

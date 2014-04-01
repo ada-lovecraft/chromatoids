@@ -13,6 +13,7 @@ var Bullet = function(game, x, y, bulletType, bulletSpeed) {
   this.checkWorldBounds = true;
   this.outOfBoundsKill = true;
 
+  
 };
 
 Bullet.prototype = Object.create(Block.prototype);
@@ -21,6 +22,7 @@ Bullet.prototype.constructor = Bullet;
 Bullet.prototype.fire = function() {
   this.body.velocity.x = this.bulletType.velocity.x * this.bulletSpeed;
   this.body.velocity.y = this.bulletType.velocity.y * this.bulletSpeed;
+
 };
 
 Bullet.prototype.setBulletType = function(bulletType) {

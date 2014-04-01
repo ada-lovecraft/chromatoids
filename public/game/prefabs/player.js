@@ -26,6 +26,11 @@ var Player = function(game, x, y, moveSpeed, fireRate, bulletGroup) {
   this.cursors.left.onDown.add(this.fire, this);
   this.cursors.right.onDown.add(this.fire, this);
   this.fireTimer = this.fireRate;
+
+  this.fireSound = game.add.audio('fireSound');
+  this.deathSound = game.add.audio('playerDeathSound');
+
+  this.events.onKilled.add(this.deathHandler, this);
 };
 
 Player.prototype = Object.create(Block.prototype);
@@ -43,6 +48,10 @@ Player.prototype.setBulletGroup = function(bulletGroup) {
   this.bulletGroup = bulletGroup;
 }
 
+Player.prototype.deathHandler = function() {
+  this.deathSound.play();
+}
+
 Player.prototype.fire = function(key) {
   if(this.fireTimer < game.time.now) {
     var bulletType = BulletTypes[key.event.keyIdentifier.toUpperCase()];
@@ -50,13 +59,13 @@ Player.prototype.fire = function(key) {
     if (!bullet) {
       bullet = new Bullet(game, this.x, this.y, bulletType);
       this.bulletGroup.add(bullet);
-      bullet.fire()
+      
     } else {
       bullet.setBulletType(bulletType);
       bullet.reset(this.x, this.y);
       bullet.revive();
-      bullet.fire();
     }
+    bullet.fire();
     this.fireTimer = game.time.now + this.fireRate;
   }
 };

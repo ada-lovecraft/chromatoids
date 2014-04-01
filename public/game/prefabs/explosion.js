@@ -1,28 +1,31 @@
 'use strict';
 
-var Explosion = function(game, x, y, color, particleSize, explosionSize) {
-  this.color = color;
+var BulletExplosion = function(game, x, y, explosionSize) {
   this.explosionSize = explosionSize || 10;
-  this.particleSize = particleSize;
+  this.explosionTime = 2000;
 
   Phaser.Particles.Arcade.Emitter.call(this, game, 0, 0);
   this.particleClass = Bullet
   this.gravity = 500;
-  this.makeParticles(4,BulletTypes.DEFAULT);
+  this.makeParticles(BulletTypes.DEFAULT);
+  this.setRotation(50,100);
 };
 
-Explosion.prototype = Object.create(Phaser.Particles.Arcade.Emitter.prototype);
-Explosion.prototype.constructor = Explosion;
+BulletExplosion.prototype = Object.create(Phaser.Particles.Arcade.Emitter.prototype);
+BulletExplosion.prototype.constructor = BulletExplosion;
 
-Explosion.prototype.setColor = function(color) {
-  this.color = color;
-  this.forEachDead(function(particle) {
-    particle.setColor(this.color);
-  }, this);
+BulletExplosion.prototype.setParticleType = function(particleType) {
+  this.color = particleType.color;
+  this.callAll('setBulletType', null, particleType);
+};
+BulletExplosion.prototype.setExplosionTime = function(explosionTime) {
+  this.explosionTime = explosionTime;
 };
 
-Explosion.prototype.explode = function(explosionSize) {
+
+
+BulletExplosion.prototype.explode = function(explosionSize) {
   explosionSize = explosionSize || this.explosionSize;
-  this.start(true, 2000, null, explosionSize);
+  this.start(true, this.explosionTime, null, explosionSize);
 }
 

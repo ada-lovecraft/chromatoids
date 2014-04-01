@@ -3,25 +3,63 @@
   function Play() {}
   Play.prototype = {
     create: function() {
+      this.level = 1;
+      this.gameOver = false;
+      this.score = 0;
+
       game.physics.startSystem(Phaser.Physics.ARCADE);
       this.bulletGroup = game.add.group();
       this.enemyGroup = game.add.group();
-      this.emitter = game.add.emitter(0,0,100);
-      this.emitter.makeParticles('particle');
-      this.emitter.gravity = 200;
+      this.pointGroup = game.add.group();
 
-      this.explosion = new Explosion(game, 100,100, 'white', 4, 10);
-      game.add.existing(this.explosion);
+      this.bulletExplosion = new BulletExplosion(game, 100,100,  10);
+
+      this.enemyDeathExplosion = new BulletExplosion(game, 100, 100, 20);
+      this.enemyDeathExplosion.setXSpeed(-500,500);
+      this.enemyDeathExplosion.setYSpeed(-500,500);
+
+      this.playerDeathExplosion = new BulletExplosion(game, 100, 100, 100);
+      this.playerDeathExplosion.setXSpeed(-1000,1000);
+      this.playerDeathExplosion.setYSpeed(-1000,1000);
+
+      game.add.existing(this.bulletExplosion);
 
       this.player = new Player(game, game.width/2, game.height/2, 500, 100, this.bulletGroup);
       game.add.existing(this.player);
 
-      this.level = 1;
+      this.scoreText = game.add.bitmapText(10, 10, 'minecraftia','SCORE: 0', 16);
 
+      this.music = new WarpedSound(game, 'gameMusic');
+      this.music.play();
 
+      this.wrongSound = game.add.audio('wrongSound', 0.2);
+      //var clock = game.add.sprite(100, 100, 'clock');
+      //var bomb = game.add.sprite(200, 100, 'bomb');
     },
     update: function() {
-      if(this.enemyGroup.countLiving() < this.level * 2) {
+      this.generateEnemy();
+      this.checkCollisions();
+
+      if(this.gameOver) {
+        if(!!!this.playerDeathExplosion.countLiving() && !this.playerDeathExplosion.on && !!!this.enemyDeathExplosion.countLiving()) {
+          this.music.stop();
+          game.state.start('gameover');
+        }
+      }
+    },
+    checkCollisions: function() {
+      game.physics.arcade.collide(this.bulletGroup, this.enemyGroup, this.bulletHandler, null, this);
+      game.physics.arcade.collide(this.player, this.enemyGroup, this.deathHandler, this.checkIsDangerous, this);
+      game.physics.arcade.collide(this.enemyDeathExplosion, this.enemyGroup, this.bulletHandler, null, this);
+      if(this.gameOver) {
+        game.physics.arcade.collide(this.playerDeathExplosion, this.enemyGroup, this.bulletHandler, null, this);
+      }
+    },
+    checkIsDangerous: function(player, enemy) {
+      return enemy.isDangerous;
+    },
+    generateEnemy: function() {
+      if(this.enemyGroup.countLiving() < this.level * 2 && !this.gameOver) {
         var enemy = this.enemyGroup.getFirstExists(false);
         if(!enemy) {
           enemy = new Enemy(game, game.world.randomX, game.world.randomY, game.rnd.integerInRange(0,3));
@@ -32,28 +70,47 @@
         }
         enemy.revive();
       }
-      game.physics.arcade.collide(this.bulletGroup, this.enemyGroup, this.bulletHandler, null, this);
-      game.physics.arcade.collide(this.player, this.enemyGroup, this.deathHandler, null, this);
-      //game.physics.arcade.collide(this.explosion, this.enemyGroup, this.bulletHandler, null, this);
     },
     bulletHandler: function(bullet, enemy) {
-      if(bullet.bulletType.color == enemy.enemyType.color) { 
+      if(bullet.bulletType == BulletTypes.CHROMATIC || bullet.bulletType.color == enemy.enemyType.color) { 
         enemy.kill();
+        this.enemyDeathExplosion.x = enemy.x;
+        this.enemyDeathExplosion.y = enemy.y;
+        this.enemyDeathExplosion.setParticleType(bullet.bulletType)
+        this.enemyDeathExplosion.explode();
+        this.score += 100;
+          
+        var pointFader = this.pointGroup.getFirstExists(false);
+        if (!pointFader) {
+          pointFader = game.add.bitmapText(enemy.x - enemy.width / 2, enemy.y - enemy.height / 2, 'minecraftia', '+100', 16);
+          //pointFader.anchor.setTo(0.5, 0.5);
+          this.pointGroup.add(pointFader);
+        }
+
+        var tween = game.add.tween(pointFader).to({y: pointFader.y - 30, alpha: 0}, 300, Phaser.Easing.Linear.NONE, true);
+        this.scoreText.setText('SCORE: ' + this.score);
+        this.level = Math.ceil(this.score / 1000);
+        
+      } else {
+        this.wrongSound.play();
+        this.bulletExplosion.x = bullet.x;
+        this.bulletExplosion.y = bullet.y;
+        this.bulletExplosion.explode();
       }
-      this.explosion.x = bullet.x;
-      this.explosion.y = bullet.y;
-      this.explosion.setColor(bullet.bulletType.color);
-      this.explosion.explode();
-      
+
       bullet.kill();
     },
     deathHandler: function(player, enemy) {
       player.kill();
       enemy.kill();
-      this.explosion.x = player.x;
-      this.explosion.y = player.y;
-      this.explosion.setColor('white');
-      this.explosion.explode(100);
+      this.score += 100;
+      this.scoreText.setText('SCORE: ' + this.score);
+      this.playerDeathExplosion.x = player.x;
+      this.playerDeathExplosion.y = player.y;
+      this.playerDeathExplosion.setParticleType(BulletTypes.CHROMATIC);
+      this.playerDeathExplosion.explode();
+      this.gameOver = true;
+      game.add.tween(this.music).to({volume: 0}, 1500, Phaser.Easing.Linear.None, true);
     }
   };
   PlayState = Play;

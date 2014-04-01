@@ -14,6 +14,17 @@
       this.load.setPreloadSprite(this.asset);
       this.load.image('yeoman', 'assets/yeoman-logo.png');
       this.load.image('particle', 'assets/particle.png');
+      this.load.image('clock', 'assets/clock.png');
+      this.load.image('bomb', 'assets/bomb.png');
+      this.load.audio('gameMusic', ['assets/stage-one.mp3', 'assets/stage-one.ogg']);
+      this.load.audio('enemyDeathSound', 'assets/enemy-death.wav');
+      this.load.audio('playerDeathSound', 'assets/player-death.wav');
+      this.load.audio('fireSound', 'assets/fire.wav');
+      this.load.audio('wrongSound', 'assets/wrong-color.wav');
+
+
+      game.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml');
+
 
     },
     create: function() {

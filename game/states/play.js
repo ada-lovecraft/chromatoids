@@ -49,7 +49,7 @@
     },
     checkCollisions: function() {
       game.physics.arcade.collide(this.bulletGroup, this.enemyGroup, this.bulletHandler, null, this);
-      game.physics.arcade.collide(this.player, this.enemyGroup, this.deathHandler, this.checkIsDangerous, this);
+      game.physics.arcade.overlap(this.player, this.enemyGroup, this.deathHandler, this.checkIsDangerous, this);
       game.physics.arcade.collide(this.enemyDeathExplosion, this.enemyGroup, this.bulletHandler, null, this);
       if(this.gameOver) {
         game.physics.arcade.collide(this.playerDeathExplosion, this.enemyGroup, this.bulletHandler, null, this);

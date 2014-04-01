@@ -154,4 +154,4 @@
   * Can still fire when dead
 
 ### Enhancements:
-  * firing direction indicators
+  * <del>firing direction indicators</del>

@@ -1,6 +1,7 @@
 'use strict';
 
-
+var indicators = {}, 
+    indicatorGroup;
 var Player = function(game, x, y, moveSpeed, fireRate, bulletGroup) {
 
   this.moveSpeed = moveSpeed || 300;
@@ -10,8 +11,29 @@ var Player = function(game, x, y, moveSpeed, fireRate, bulletGroup) {
   Block.call(this, game, x, y, 16, 'white');
   this.anchor.setTo(0.5, 0.5);
 
+  indicatorGroup = game.add.group(this);
   game.physics.arcade.enableBody(this);
   this.body.collideWorldBounds = true;
+
+  indicators[Colors.YELLOW] = new Triangle(game, 0, -13, 8, Colors.YELLOW);
+  indicators[Colors.YELLOW].angle = -45;
+  indicatorGroup.add(indicators[Colors.YELLOW]);
+
+  indicators[Colors.GREEN] = new Triangle(game, 13, 0, 8, Colors.GREEN);
+  indicatorGroup.add(indicators[Colors.GREEN]);
+  indicators[Colors.GREEN].angle = 45;
+
+  indicators[Colors.RED] = new Triangle(game, 0, 13, 8, Colors.RED);
+  indicatorGroup.add(indicators[Colors.RED]);
+  indicators[Colors.RED].angle = 135;
+
+  indicators[Colors.BLUE] = new Triangle(game, -13, 0, 8, Colors.BLUE);
+  indicatorGroup.add(indicators[Colors.BLUE]);
+  indicators[Colors.BLUE].angle = -135;
+
+  indicatorGroup.setAll('anchor.x', 0.5);
+  indicatorGroup.setAll('anchor.y', 0.5);
+  indicatorGroup.setAll('alpha', 0.5);
 
   
   this.leftKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
@@ -67,6 +89,9 @@ Player.prototype.fire = function(key) {
     }
     bullet.fire();
     this.fireTimer = game.time.now + this.fireRate;
+
+    indicators[bulletType.color].alpha = 1;
+    game.add.tween(indicators[bulletType.color]).to({alpha: 0.5}, 100, Phaser.Easing.Linear.NONE, true);
   }
 };
 

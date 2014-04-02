@@ -3,6 +3,7 @@ define(function(require, exports, module) {
 
   var BulletTypes = require('config/enums').BulletTypes;
   var EnemyTypes = require('config/enums').EnemyTypes;
+  var Colors = require('config/enums').Colors;
 
   var BulletExplosion = require('prefabs/bulletExplosion');
   var Bullet = require('prefabs/bullet');
@@ -45,6 +46,9 @@ define(function(require, exports, module) {
       this.music.play();
 
       this.wrongSound = this.game.add.audio('wrongSound', 0.2);
+
+      
+
       //var clock = game.add.sprite(100, 100, 'clock');
       //var bomb = game.add.sprite(200, 100, 'bomb');
     },

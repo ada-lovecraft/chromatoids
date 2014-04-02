@@ -21,6 +21,7 @@ define(function(require, exports, module) {
       this.load.audio('playerDeathSound', 'assets/player-death.wav');
       this.load.audio('fireSound', 'assets/fire.wav');
       this.load.audio('wrongSound', 'assets/wrong-color.wav');
+      this.load.script('MouseSprite', 'game/plugins/MouseSprite.js');
 
 
       this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml');

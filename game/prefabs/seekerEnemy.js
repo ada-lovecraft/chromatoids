@@ -35,7 +35,7 @@ define(function(require, exports, module) {
       game.physics.arcade.accelerateToObject(this, this.player, this.accellerationSpeed, this.maxSpeed, this.maxSpeed);
       this.pollTime = game.time.now + this.pollingSpeed;
     }
-    this.angle = game.physics.arcade.angleBetween(this, this.player) * 57.3;
+    this.rotation = game.physics.arcade.angleBetween(this, this.player) * 57.3;
   }
   module.exports =  SeekerEnemy;
 });

@@ -54,21 +54,6 @@ module.exports = function (grunt) {
         path: 'http://localhost:<%= connect.options.port %>'
       }
     },
-    htmlbuild: {
-      dist: {
-        src: 'templates/_index.html.tpl',
-        dest: 'index.html',
-        options: {
-          scripts: {
-            libs: 'libs/*.js',
-            phaser: 'bower_components/phaser-official/build/phaser.js',
-            gameStates: 'game/states/*.js',
-            gamePrefabs: 'game/prefabs/*.js',
-            gameBootstrapper: 'game/main.js'
-          }
-        }
-      }
-    },
     copy: {
       prod: {
         files: [
@@ -84,7 +69,7 @@ module.exports = function (grunt) {
     }
   });
   
-  grunt.registerTask('build', ['htmlbuild', 'buildBootstrapper']);
+  grunt.registerTask('build', ['buildBootstrapper']);
   grunt.registerTask('serve', ['build', 'connect:livereload', 'open', 'watch']);
   grunt.registerTask('default', ['serve']);
   grunt.registerTask('prod', ['build', 'copy']);

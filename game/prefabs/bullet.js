@@ -15,16 +15,22 @@ define(function(require, exports, module) {
     this.checkWorldBounds = true;
     this.outOfBoundsKill = true;
 
+    this.bulletPower = 200;
+
     
   };
 
   Bullet.prototype = Object.create(Block.prototype);
   Bullet.prototype.constructor = Bullet;
 
-  Bullet.prototype.fire = function() {
-    this.body.velocity.x = this.bulletType.velocity.x * this.bulletSpeed;
-    this.body.velocity.y = this.bulletType.velocity.y * this.bulletSpeed;
-
+  Bullet.prototype.fireAt = function(sprite) {
+    
+    var angle = this.game.physics.arcade.angleBetween(this, sprite);
+    var ray = {
+      x: this.x + this.bulletPower * Math.cos(angle),
+      y: this.y + this.bulletPower * Math.sin(angle)
+    };
+    this.game.physics.arcade.moveToXY(this, ray.x, ray.y, null, 300);
   };
 
   Bullet.prototype.setBulletType = function(bulletType) {

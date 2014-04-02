@@ -7,6 +7,42 @@ define(function(require, exports, module) {
   var Block = require('prefabs/block');
   var Triangle = require('prefabs/triangle');
   var Bullet = require('prefabs/bullet');
+  var CrossHair = require('prefabs/crosshair');
+
+  var FireDirections = {
+    spreads: [
+      { 
+        name: 'right',
+        min: -0.78, 
+        max: 0.78,
+        inclusive: true
+      },
+      { 
+        name: 'down',
+        min: 0.78,
+        max: 2.4,
+        inclusive: true
+      },
+      { 
+        name: 'left',
+        min: 2.4,
+        max: -2.4,
+        inclusive: false
+      },
+      { 
+        name: 'up',
+        min: -2.4,
+        max: -0.78,
+        inclusive: true
+      },
+    ],
+    bulletTypes: [
+      BulletTypes.GREEN,
+      BulletTypes.RED,
+      BulletTypes.BLUE,
+      BulletTypes.YELLOW
+    ]
+  }
 
 
   var indicators = {}, 
@@ -44,7 +80,6 @@ define(function(require, exports, module) {
     indicatorGroup.setAll('anchor.y', 0.5);
     indicatorGroup.setAll('alpha', 0.5);
 
-    
     this.leftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
     this.rightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
     this.upKey = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
@@ -62,6 +97,14 @@ define(function(require, exports, module) {
     this.deathSound = this.game.add.audio('playerDeathSound');
 
     this.events.onKilled.add(this.deathHandler, this);
+    this.crossHair = new CrossHair(this.game, this.game.width/2, this.game.height/2, 32, Colors.GREY);
+    this.game.add.existing(this.crossHair);
+    var mouseSprite = this.game.plugins.add(Phaser.Plugin.MouseSprite);
+    
+    mouseSprite.setSprite(this.crossHair);
+    mouseSprite.setMoveCallback(this.setCrosshairColor, this);
+
+
   };
 
   Player.prototype = Object.create(Block.prototype);
@@ -84,24 +127,51 @@ define(function(require, exports, module) {
   }
 
 
-  Player.prototype.fire = function(key) {
+  Player.prototype.setCrosshairColor = function() {
+    var angle = this.game.physics.arcade.angleToPointer(this);
+    /*
+    if(angle < 0.78 && angle > -0.78 && this.crossHair.color != Colors.GREEN) {
+      this.crossHair.setColor(Colors.GREEN);
+    } else if(angle < 2.4 && angle > 0.78 && this.crossHair.color != Colors.RED) {
+      this.crossHair.setColor(Colors.RED);
+    } else if (angle < -2.4 || angle > 2.4 && this.crossHair.color != Colors.BLUE) {
+      this.crossHair.setColor(Colors.BLUE);
+    } else if (angle < -0.78 && angle > -2.4 && this.crossHair.color != Colors.YELLOW) {
+      this.crossHair.setColor(Colors.YELLOW)
+    }*/
+    FireDirections.spreads.forEach(function(spread, index){
+      if(spread.inclusive) {
+        if(angle < spread.max && angle > spread.min && this.crossHair.color != FireDirections.bulletTypes[index]) {
+          this.crossHair.setColor(FireDirections.bulletTypes[index].color);
+          this.bulletType = FireDirections.bulletTypes[index];
+        }
+      } else if(!spread.inclusive) {
+        if(angle < spread.max || angle > spread.min && this.crossHair.color != FireDirections.bulletTypes[index]) {
+          this.crossHair.setColor(FireDirections.bulletTypes[index].color);
+          this.bulletType = FireDirections.bulletTypes[index];
+        }
+      }
+    }, this);
+
+  }
+
+  Player.prototype.fire = function() {
     if(this.fireTimer < this.game.time.now) {
-      var bulletType = BulletTypes[key.event.keyIdentifier.toUpperCase()];
       var bullet = this.bulletGroup.getFirstExists(false);
       if (!bullet) {
-        bullet = new Bullet(this.game, this.x, this.y, bulletType);
+        bullet = new Bullet(this.game, this.x, this.y, this.bulletType);
         this.bulletGroup.add(bullet);
         
       } else {
-        bullet.setBulletType(bulletType);
+        bullet.setBulletType(this.bulletType);
         bullet.reset(this.x, this.y);
         bullet.revive();
       }
-      bullet.fire();
+      bullet.fireAt(this.crossHair);
       this.fireTimer = this.game.time.now + this.fireRate;
 
-      indicators[bulletType.color].alpha = 1;
-      this.game.add.tween(indicators[bulletType.color]).to({alpha: 0.5}, 100, Phaser.Easing.Linear.NONE, true);
+      indicators[this.bulletType.color].alpha = 1;
+      this.game.add.tween(indicators[this.bulletType.color]).to({alpha: 0.5}, 100, Phaser.Easing.Linear.NONE, true);
     }
   };
 
@@ -124,8 +194,13 @@ define(function(require, exports, module) {
       this.body.velocity.y = -this.moveSpeed;
     }
 
+    if(this.game.input.activePointer.isDown) {
+      this.fire();
+    }
     
   };
+
+
 
   module.exports = Player;
 });

@@ -1,5 +1,5 @@
-(function () {
-  'use strict';
+'use strict';
+define(function(require, exports, module) {
   function Preload() {
     this.asset = null;
     this.ready = false;
@@ -21,9 +21,10 @@
       this.load.audio('playerDeathSound', 'assets/player-death.wav');
       this.load.audio('fireSound', 'assets/fire.wav');
       this.load.audio('wrongSound', 'assets/wrong-color.wav');
+      this.load.script('MouseSprite', 'game/plugins/MouseSprite.js');
 
 
-      game.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml');
+      this.load.bitmapFont('minecraftia', 'assets/minecraftia.png', 'assets/minecraftia.xml');
 
 
     },
@@ -32,7 +33,7 @@
     },
     update: function() {
       if(!!this.ready) {
-        game.state.start('menu');
+        this.game.state.start('menu');
       }
     },
     onLoadComplete: function() {
@@ -40,5 +41,5 @@
     }
   };
 
-  PreloadState = Preload;
-}());
+  module.exports =  Preload;
+});

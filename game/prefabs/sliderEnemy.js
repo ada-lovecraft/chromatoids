@@ -57,11 +57,8 @@ define(function(require, exports, module) {
         travel = {y: this.y + opposite }
       }
 
-      console.log(travel, adjacent, opposite);
-
       this.game.add.tween(this).to(travel, this.pollingSpeed / 2, Phaser.Easing.Linear.NONE, true);
       this.pollTime = this.game.time.now + this.pollingSpeed;
-      //this.pollTime = 0;
     }
     
   };

@@ -2,8 +2,8 @@
 define(function(require, exports, module) {
   
   var BasicEnemy = require('prefabs/basicEnemy');
-  var SliderEnemy = require('prefabs/SliderEnemy');
-  var SeekerEnemy = require('prefabs/SeekerEnemy');
+  var SliderEnemy = require('prefabs/sliderEnemy');
+  var SeekerEnemy = require('prefabs/seekerEnemy');
 
   exports.Colors = Object.freeze({
     YELLOW: 'yellow',

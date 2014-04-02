@@ -1,6 +1,7 @@
 'use strict';
 define(function(require, exports, module) {
-
+  var Phaser = require('phaser');
+  
   var BulletTypes = require('config/enums').BulletTypes;
   var EnemyTypes = require('config/enums').EnemyTypes;
   var Colors = require('config/enums').Colors;

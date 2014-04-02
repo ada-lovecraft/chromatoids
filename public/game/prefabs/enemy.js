@@ -1,7 +1,7 @@
 'use strict';
 
 define(function(require, exports, module) {
-
+  var Phaser = require('phaser');
   var Block = require('prefabs/block');
   var Colors = require('config/enums').Colors;
   

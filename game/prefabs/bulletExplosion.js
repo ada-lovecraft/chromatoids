@@ -1,6 +1,6 @@
 'use strict';
 define(function(require, exports, module) {
-
+  var Phaser = require('phaser');
   var Bullet = require('../prefabs/bullet');
   var BulletTypes = require('config/enums').BulletTypes;
 

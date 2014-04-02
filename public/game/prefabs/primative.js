@@ -1,6 +1,6 @@
 'use strict';
 define(function(require, exports, module) {
-
+  var Phaser = require('phaser');
 
   var Primative = function(game, x, y, size, color ) {
     this.size = size;

@@ -1,7 +1,7 @@
 'use strict';
 
 define(function(require, exports, module) {
-
+  var Phaser = require('phaser');
   var Enemy = require('prefabs/enemy');
   var GameUtils = require('prefabs/gameUtils');
 

@@ -1,5 +1,16 @@
-(function() {
-  'use strict';
+'use strict';
+define(function(require, exports, module) {
+
+  var BulletTypes = require('config/enums').BulletTypes;
+  var EnemyTypes = require('config/enums').EnemyTypes;
+
+  var BulletExplosion = require('prefabs/bulletExplosion');
+  var Bullet = require('prefabs/bullet');
+  var Player = require('prefabs/player');
+  var GameUtils = require('prefabs/gameUtils');
+  var WarpedSound = require('prefabs/WarpedSound');
+  var EnemyFactory = require('prefabs/EnemyFactory');
+
   function Play() {}
   Play.prototype = {
     create: function() {
@@ -7,33 +18,33 @@
       this.gameOver = false;
       this.score = 0;
 
-      game.physics.startSystem(Phaser.Physics.ARCADE);
-      this.bulletGroup = game.add.group();
-      this.enemyGroup = game.add.group();
-      this.pointGroup = game.add.group();
+      this.game.physics.startSystem(Phaser.Physics.ARCADE);
+      this.bulletGroup = this.game.add.group();
+      this.enemyGroup = this.game.add.group();
+      this.pointGroup = this.game.add.group();
 
-      this.bulletExplosion = new BulletExplosion(game, 100,100,  10);
+      this.bulletExplosion = new BulletExplosion(this.game, 100,100,  10);
 
-      this.enemyDeathExplosion = new BulletExplosion(game, 100, 100, 20);
+      this.enemyDeathExplosion = new BulletExplosion(this.game, 100, 100, 20);
       this.enemyDeathExplosion.setXSpeed(-500,500);
       this.enemyDeathExplosion.setYSpeed(-500,500);
 
-      this.playerDeathExplosion = new BulletExplosion(game, 100, 100, 100);
+      this.playerDeathExplosion = new BulletExplosion(this.game, 100, 100, 100);
       this.playerDeathExplosion.setXSpeed(-1000,1000);
       this.playerDeathExplosion.setYSpeed(-1000,1000);
 
-      game.add.existing(this.bulletExplosion);
+      this.game.add.existing(this.bulletExplosion);
 
-      this.player = new Player(game, game.width/2, game.height/2, 500, 100, this.bulletGroup);
-      game.add.existing(this.player);
+      this.player = new Player(this.game, this.game.width/2, this.game.height/2, 500, 100, this.bulletGroup);
+      this.game.add.existing(this.player);
       GameUtils.setPlayer(this.player);
 
-      this.scoreText = game.add.bitmapText(10, 10, 'minecraftia','SCORE: 0', 16);
+      this.scoreText = this.game.add.bitmapText(10, 10, 'minecraftia','SCORE: 0', 16);
 
-      this.music = new WarpedSound(game, 'gameMusic');
+      this.music = new WarpedSound(this.game, 'gameMusic');
       this.music.play();
 
-      this.wrongSound = game.add.audio('wrongSound', 0.2);
+      this.wrongSound = this.game.add.audio('wrongSound', 0.2);
       //var clock = game.add.sprite(100, 100, 'clock');
       //var bomb = game.add.sprite(200, 100, 'bomb');
     },
@@ -44,16 +55,16 @@
       if(this.gameOver) {
         if(!!!this.playerDeathExplosion.countLiving() && !this.playerDeathExplosion.on && !!!this.enemyDeathExplosion.countLiving()) {
           this.music.stop();
-          game.state.start('gameover');
+          this.game.state.start('gameover');
         }
       }
     },
     checkCollisions: function() {
-      game.physics.arcade.collide(this.bulletGroup, this.enemyGroup, this.bulletHandler, null, this);
-      game.physics.arcade.overlap(this.player, this.enemyGroup, this.deathHandler, this.checkIsDangerous, this);
-      game.physics.arcade.collide(this.enemyDeathExplosion, this.enemyGroup, this.bulletHandler, null, this);
+      this.game.physics.arcade.collide(this.bulletGroup, this.enemyGroup, this.bulletHandler, null, this);
+      this.game.physics.arcade.overlap(this.player, this.enemyGroup, this.deathHandler, this.checkIsDangerous, this);
+      this.game.physics.arcade.collide(this.enemyDeathExplosion, this.enemyGroup, this.bulletHandler, null, this);
       if(this.gameOver) {
-        game.physics.arcade.collide(this.playerDeathExplosion, this.enemyGroup, this.bulletHandler, null, this);
+        this.game.physics.arcade.collide(this.playerDeathExplosion, this.enemyGroup, this.bulletHandler, null, this);
       }
     },
     checkIsDangerous: function(player, enemy) {
@@ -71,7 +82,7 @@
           enemy.setType(game.rnd.integerInRange(0,3));
         }
         */
-        var enemy = EnemyFactory.create(game, GameUtils.randomEnemyType(), game.world.randomX, game.world.randomY, GameUtils.randomColor(['GREY', 'WHITE']));
+        var enemy = EnemyFactory.create(this.game, GameUtils.randomEnemyType(), this.game.world.randomX, this.game.world.randomY, GameUtils.randomColor(['GREY', 'WHITE']));
         enemy.revive();
         this.enemyGroup.add(enemy);
         
@@ -88,12 +99,12 @@
           
         var pointFader = this.pointGroup.getFirstExists(false);
         if (!pointFader) {
-          pointFader = game.add.bitmapText(enemy.x - enemy.width / 2, enemy.y - enemy.height / 2, 'minecraftia', '+100', 16);
+          pointFader = this.game.add.bitmapText(enemy.x - enemy.width / 2, enemy.y - enemy.height / 2, 'minecraftia', '+100', 16);
           //pointFader.anchor.setTo(0.5, 0.5);
           this.pointGroup.add(pointFader);
         }
 
-        var tween = game.add.tween(pointFader).to({y: pointFader.y - 30, alpha: 0}, 300, Phaser.Easing.Linear.NONE, true);
+        var tween = this.game.add.tween(pointFader).to({y: pointFader.y - 30, alpha: 0}, 300, Phaser.Easing.Linear.NONE, true);
         this.scoreText.setText('SCORE: ' + this.score);
         this.level = Math.ceil(this.score / 1000);
         
@@ -116,8 +127,8 @@
       this.playerDeathExplosion.setParticleType(BulletTypes.CHROMATIC);
       this.playerDeathExplosion.explode();
       this.gameOver = true;
-      game.add.tween(this.music).to({volume: 0}, 1500, Phaser.Easing.Linear.None, true);
+      this.game.add.tween(this.music).to({volume: 0}, 1500, Phaser.Easing.Linear.None, true);
     }
   };
-  PlayState = Play;
-}());
+  module.exports = Play;
+});

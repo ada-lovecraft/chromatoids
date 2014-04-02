@@ -9,17 +9,9 @@
 </head>
 <body>
   <div id="chromatoids"></div>
+  <script data-main="../game/main.js" src="../libs/require.js"></script>
+  <script type="text/javascript" src="../bower_components/phaser-official/build/phaser.js"></script>
 
-  <!-- build:script phaser -->
-  <!-- /build -->
-  <!-- build:script gameBootstrapper -->
-  <!-- /build -->
-  
-  <!-- build:script gamePrefabs -->
-  <!-- /build -->
-
-  <!-- build:script gameStates -->
-  <!-- /build -->
 
 
 

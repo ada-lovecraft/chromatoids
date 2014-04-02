@@ -60,6 +60,7 @@ module.exports = function (grunt) {
         dest: 'index.html',
         options: {
           scripts: {
+            libs: 'libs/*.js',
             phaser: 'bower_components/phaser-official/build/phaser.js',
             gameStates: 'game/states/*.js',
             gamePrefabs: 'game/prefabs/*.js',
@@ -73,6 +74,7 @@ module.exports = function (grunt) {
         files: [
           // includes files within path and its sub-directories
           { expand: true, src: ['assets/**'], dest: 'public/' },
+          { expand: true, src: ['libs/**'], dest: 'public/' },
           { expand: true, src: ['bower_components/**/build/*.js'], dest: 'public/' },
           { expand: true, src: ['css/**'], dest: 'public/' },
           { expand: true, src: ['game/**'], dest: 'public/' },

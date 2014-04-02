@@ -1,82 +1,20 @@
-var Colors = Object.freeze({
-  YELLOW: 'yellow',
-  GREEN: '#2aff57',
-  RED: 'red',
-  BLUE: '#2ab1ff',
-  GREY: '#cccccc',
-  WHITE: 'white'
-});
+'use strict';
 
-var EnemyTypes = Object.freeze({
-  BASIC: BasicEnemy,
-  SEEKER: SeekerEnemy,
-  SLIDER: SliderEnemy
-});
-
-
-
-var BulletTypes = Object.freeze({
-  UP: {
-    color: Colors.YELLOW,
-    velocity: {
-      x: 0,
-      y: -1
-    }
-  },
-  RIGHT: {
-    color: Colors.GREEN,
-    velocity: {
-      x: 1,
-      y: 0
-    }
-  },
-  DOWN: {
-    color: Colors.RED,
-    velocity: {
-      x: 0,
-      y: 1
-    }
-  },
-  LEFT: {
-    color: Colors.BLUE,
-    velocity: {
-      x: -1,
-      y: 0
-    }
-  },
-  DEFAULT: {
-    color: Colors.GREY,
-    velocity: {
-      x: 0,
-      y: 0
-    }
-  },
-  CHROMATIC: {
-    color: Colors.WHITE,
-    velocity: {
-      x: 0,
-      y: 0
-    }
-  }
-});
-
-
-
-(function () {
-  'use strict';
-
+define(function(require, exports, module) {
   function Boot() {
   }
 
   Boot.prototype = {
     preload: function() {
+      console.log('boot state');
       this.load.image('preloader', 'assets/preloader.gif');
     },
     create: function() {
-      game.input.maxPointers = 1;
-      game.state.start('preload');
+      this.game.input.maxPointers = 1;
+      this.game.state.start('preload');
     }
   };
 
-  BootState = Boot;
-}());
+  module.exports =  Boot;
+});
+  

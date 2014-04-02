@@ -155,3 +155,4 @@
 
 ### Enhancements:
   * <del>firing direction indicators</del>
+  * requirejs

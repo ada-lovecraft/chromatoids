@@ -10,7 +10,7 @@ define(function(require, exports, module) {
   var Player = require('prefabs/player');
   var GameUtils = require('prefabs/gameUtils');
   var WarpedSound = require('prefabs/WarpedSound');
-  var EnemyFactory = require('prefabs/EnemyFactory');
+  var EnemyFactory = require('prefabs/enemyFactory');
 
   function Play() {}
   Play.prototype = {

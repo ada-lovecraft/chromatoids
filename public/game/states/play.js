@@ -43,7 +43,7 @@ define(function(require, exports, module) {
       this.scoreText = this.game.add.bitmapText(10, 10, 'minecraftia','SCORE: 0', 16);
 
       this.music = new WarpedSound(this.game, 'gameMusic');
-      this.music.play();
+      //this.music.play();
 
       this.wrongSound = this.game.add.audio('wrongSound', 0.2);
 

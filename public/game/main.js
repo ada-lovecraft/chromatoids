@@ -1,7 +1,19 @@
 'use strict';
 
+requirejs.config({
+  paths: {
+    Phaser: '../bower_components/phaser-official/build/phaser'
+  },
+  map: {
+    '*': {
+      phaser: 'Phaser'
+    }
+  }
+});
+
 //global variables
 define(function(require) {
+  var Phaser = require('phaser');
   var BootState = require('states/boot');
   var GameoverState = require('states/gameover');
   var MenuState = require('states/menu');

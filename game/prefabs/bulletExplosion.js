@@ -1,37 +1,36 @@
 'use strict';
-define(function(require, exports, module) {
-  var Phaser = require('phaser');
-  var Bullet = require('../prefabs/bullet');
-  var BulletTypes = require('config/enums').BulletTypes;
 
-  var BulletExplosion = function(game, x, y, explosionSize) {
-    this.explosionSize = explosionSize || 10;
-    this.explosionTime = 2000;
+var Bullet = require('./bullet');
+var BulletTypes = require('../config/enums').BulletTypes;
 
-    Phaser.Particles.Arcade.Emitter.call(this, game, 0, 0);
-    this.particleClass = Bullet
-    this.gravity = 500;
-    this.makeParticles(BulletTypes.DEFAULT);
-    this.setRotation(50,100);
-  };
+var BulletExplosion = function(game, x, y, explosionSize) {
+  this.explosionSize = explosionSize || 10;
+  this.explosionTime = 2000;
 
-  BulletExplosion.prototype = Object.create(Phaser.Particles.Arcade.Emitter.prototype);
-  BulletExplosion.prototype.constructor = BulletExplosion;
+  Phaser.Particles.Arcade.Emitter.call(this, game, 0, 0);
+  this.particleClass = Bullet
+  this.gravity = 500;
+  this.makeParticles(BulletTypes.DEFAULT);
+  this.setRotation(50,100);
+};
 
-  BulletExplosion.prototype.setParticleType = function(particleType) {
-    this.color = particleType.color;
-    this.callAll('setBulletType', null, particleType);
-  };
-  BulletExplosion.prototype.setExplosionTime = function(explosionTime) {
-    this.explosionTime = explosionTime;
-  };
+BulletExplosion.prototype = Object.create(Phaser.Particles.Arcade.Emitter.prototype);
+BulletExplosion.prototype.constructor = BulletExplosion;
 
+BulletExplosion.prototype.setParticleType = function(particleType) {
+  this.color = particleType.color;
+  this.callAll('setBulletType', null, particleType);
+};
+BulletExplosion.prototype.setExplosionTime = function(explosionTime) {
+  this.explosionTime = explosionTime;
+};
 
 
-  BulletExplosion.prototype.explode = function(explosionSize) {
-    explosionSize = explosionSize || this.explosionSize;
-    this.start(true, this.explosionTime, null, explosionSize);
-  }
 
-  module.exports = BulletExplosion;
-});
+BulletExplosion.prototype.explode = function(explosionSize) {
+  explosionSize = explosionSize || this.explosionSize;
+  this.start(true, this.explosionTime, null, explosionSize);
+}
+
+module.exports = BulletExplosion;
+

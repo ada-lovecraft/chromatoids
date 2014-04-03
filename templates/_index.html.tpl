@@ -9,15 +9,7 @@
 </head>
 <body>
   <div id="chromatoids"></div>
-  <script data-main="game/main" src="libs/require.js"></script>
-
-
-
-
-  
-  
-
-
-
+  <script src="js/phaser.js"></script>
+  <script src="js/game.js"></script>
 </body>
 </html>

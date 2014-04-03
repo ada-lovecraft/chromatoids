@@ -14,7 +14,8 @@ exports.Colors = Object.freeze({
 });
 
 exports.EnemyTypes = Object.freeze({
-  
+  BASIC: BasicEnemy,
+  SLIDER: SliderEnemy,
   SEEKER: SeekerEnemy
 });
 
